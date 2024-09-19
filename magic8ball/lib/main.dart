@@ -11,22 +11,24 @@ void main() => runApp(
 // Creates a Scaffold with
 // appbar using Stateless widget 
 class BallPage extends StatelessWidget {
+  const BallPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.green[100],
       appBar: AppBar(
         backgroundColor: Colors.green[600],
-        title: Text('GeeksforGeeks'),
+        title: const Text('GeeksforGeeks'),
       ),
-      body: Ball(),
-    );q
+      body: const Ball(),
+    );
   }
 }
 
 // Creates a Stateful widget 
 class Ball extends StatefulWidget {
-  const Ball({Key? key}) : super(key: key);
+  const Ball({super.key});
 
   @override
   _BallState createState() => _BallState();
