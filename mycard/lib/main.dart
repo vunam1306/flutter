@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
           children: [
             const CircleAvatar(
               radius: 40.0,
-              backgroundImage: AssetImage('images/'),
+              backgroundImage: AssetImage('images/download.jpeg'),
             ),
             const Text('Vu Phuong Nam',
               style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold ,
