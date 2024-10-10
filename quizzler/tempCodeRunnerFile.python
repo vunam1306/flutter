@@ -1,0 +1,13 @@
+import csv
+
+def collect_column_names(csv_file_path):
+    with open(csv_file_path, mode='r', newline='', encoding='utf-8') as file:
+        reader = csv.reader(file)
+        # Get the first row as column names
+        column_names = next(reader)
+    return column_names
+
+# Example usage
+csv_file_path = 'D:\Data Warehouse-SV\Accident.csv'
+columns = collect_column_names(csv_file_path)
+print("Column names:", columns)
