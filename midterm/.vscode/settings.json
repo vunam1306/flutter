@@ -1,4 +1,5 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
-    "cmake.sourceDirectory": "D:/Da nen tang/project/midterm/linux"
+    "cmake.sourceDirectory": "D:/Da nen tang/project/midterm/linux",
+    "FSharp.suggestGitignore": false
 }

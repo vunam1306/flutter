@@ -1,77 +1,180 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:midterm/home_page.dart';
-
+import 'package:midterm/pages/home.dart';
+import 'package:midterm/widget/widget_support.dart';
+import 'pages/bottomnav.dart';
+import 'package:midterm/widget/widget_support.dart';
+import 'signup.dart';
+import 'forgotpass.dart';
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   String _errorMessage = '';
 
-  Future<void> _signInWithEmailAndPassword() async {
-    try {
-      await _auth.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()), // Thay HomePage thành tên tệp của bạn
-      );
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        _errorMessage = e.message ?? "Đăng nhập thất bại";
-      });
-    }
-  }
+  // Future<void> _signInWithEmailAndPassword() async {
+  //   try {
+  //     UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+  //       email: _emailController.text.trim(),
+  //       password: _passwordController.text.trim(),
+  //     );
 
+  //     // Add user data to Firestore
+  //     await _firestore.collection('users').doc(userCredential.user?.uid).set({
+  //       'email': _emailController.text.trim(),
+  //       'password': _passwordController.text.trim(), // Not recommended for security reasons
+  //     });
+
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => BottomNav()),
+  //     );
+  //   } on FirebaseAuthException catch (e) {
+  //     setState(() {
+  //       _errorMessage = e.message ?? "Sign In fail";
+  //     });
+  //   }
+  // }
+
+  UserLogin() {
+    FirebaseFirestore.instance.collection("users").get().then((snapshot) {
+      snapshot.docs.forEach((result) {
+        if (result.data()['email'] != _emailController.text.trim()) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.red[300],
+              content: Text(
+                "Your email is not correct",
+                style: TextStyle(fontSize: 18.0),
+              )));
+        } else if (result.data()['password'] !=
+            _passwordController.text.trim()) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.red[300],
+              content: Text(
+                "Your password is not correct",
+                style: TextStyle(fontSize: 18.0),
+              )));
+        } else {
+          Route route = MaterialPageRoute(builder: (context) => Home());
+          Navigator.pushReplacement(context, route);
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Đăng Nhập"),
+        title: const Text("Sign In"),
+        centerTitle: true,
+        backgroundColor: Colors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+               // Logo Image
+              Image.asset(
+                'images/techzonelogo.png', // Ensure the path matches your asset
+                width: 120,
+                height: 120,
               ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Mật khẩu',
-              ),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _signInWithEmailAndPassword,
-              child: Text("Đăng Nhập"),
-            ),
-            if (_errorMessage.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  _errorMessage,
-                  style: TextStyle(color: Colors.red),
+              TextFormField(
+                validator: (value){
+                if(value==null|| value.isEmpty){
+                  return 'Please Enter Email';
+                }
+                  return null;
+                },
+                controller: _emailController,
+                decoration:  InputDecoration(
+                  hintText: 'Email', 
+                  hintStyle: AppWidget.LightTextFeildStyle(),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                  prefixIcon: Icon(Icons.email),
                 ),
+                keyboardType: TextInputType.emailAddress,
               ),
-          ],
-        ),
+              const SizedBox(height: 16),
+              TextFormField(
+                validator: (value){
+                if(value==null|| value.isEmpty){
+                  return 'Please Enter Password';
+                }
+                  return null;
+                },
+                controller: _passwordController,
+                decoration:  InputDecoration(
+                  hintText: 'Password',
+                  hintStyle: AppWidget.LightTextFeildStyle(),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                  prefixIcon: Icon(Icons.lock),
+                ),
+                obscureText: true,
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () {
+                  UserLogin();
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  backgroundColor: Colors.black,
+                ),
+                child: const Text("Sign In", style: TextStyle(color: Colors.white, fontSize: 18)),
+              ),
+              if (_errorMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    _errorMessage,
+                    style: const TextStyle(color: Colors.red, fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                SizedBox(height: 30,),
+                GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SignUp()));
+                      },
+                      child: Text(
+                        "Don't have an account? Sign up",
+                        style: AppWidget.SemiBoldTextFeildStyle(),
+                      )),
+                SizedBox(height: 10,),
+                GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => ForgotPass()));
+                      },
+                      child: Text(
+                        "Forgot your pass?",
+                        style: AppWidget.SemiBoldTextFeildStyle(),
+                      ))
+            ],
+          ),
+        )
       ),
     );
   }

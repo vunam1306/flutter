@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class EditProductPage extends StatefulWidget {
   final DocumentSnapshot? product;
 
-  EditProductPage({this.product});
+  const EditProductPage({super.key, this.product});
 
   @override
   _EditProductPageState createState() => _EditProductPageState();
@@ -55,18 +55,18 @@ class _EditProductPageState extends State<EditProductPage> {
           children: [
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(labelText: 'Name'),
             ),
             TextField(
               controller: _typeController,
-              decoration: InputDecoration(labelText: 'Type'),
+              decoration: const InputDecoration(labelText: 'Type'),
             ),
             TextField(
               controller: _priceController,
-              decoration: InputDecoration(labelText: 'Price'),
+              decoration: const InputDecoration(labelText: 'Price'),
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _saveProduct,
               child: Text(widget.product == null ? 'Add Product' : 'Save Changes'),
