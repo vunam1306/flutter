@@ -1,19 +1,5 @@
 # midterm
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
 
 TECH ZONE
 Tech Zone là nền tảng thương mại điện tử hiện đại, được phát triển bằng Flutter và FireBase cung cấp cho người dùng trải nghiệm mua sắm công nghệ chuyên nghiệp và tiện lợi. Ứng dụng cung cấp nhiều tính năng cho người dùng và quản trị viên để quản lý sản phẩm, tài khoản, đơn hàng và thanh toán.
