@@ -49,4 +49,13 @@ class AppWidget {
       );
     }
 
+    static TextStyle SmallBoldTextFeildStyle() {
+      return const TextStyle(
+        color: Colors.black,
+        fontSize: 16.0,
+        fontWeight: FontWeight.w500,
+        fontFamily: 'Poppins'
+      );
+    }
+
 }

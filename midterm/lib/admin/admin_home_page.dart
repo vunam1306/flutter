@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'edit_product_page.dart';
+import 'admin_order_manage.dart'; // Import trang AdminOrderPage
 
 class AdminHomePage extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -11,7 +12,20 @@ class AdminHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product List'),
+        title: const Text('Manage Products'),
+        actions: [
+          Text('Manage Orders', style: TextStyle(fontSize: 20),), // Text hiển thị trên nút                     
+          IconButton(
+            icon: const Icon(Icons.list_alt_outlined),
+            tooltip: 'Manage Orders', // Tooltip khi hover hoặc giữ lâu
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AdminOrderManage()),
+              );
+            },
+          ),
+        ],
       ),
       body: StreamBuilder(
         stream: _firestore.collection('products').snapshots(),
@@ -35,8 +49,7 @@ class AdminHomePage extends StatelessWidget {
                 elevation: 10.0,
                 color: Colors.white,
                 margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: ListTile(      
-                  // contentPadding: EdgeInsets.all(10),          
+                child: ListTile(
                   leading: product['Image'] != null
                       ? Image.network(
                           product['Image'],
@@ -44,7 +57,7 @@ class AdminHomePage extends StatelessWidget {
                           height: 100,
                           fit: BoxFit.contain,
                         )
-                      : const Icon(Icons.image, size: 100), // Placeholder for missing image
+                      : const Icon(Icons.image, size: 100),
                   title: Text(product['Name']),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

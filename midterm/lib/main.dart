@@ -2,13 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:midterm/pages/bottomnav.dart';
-import 'package:midterm/productpage.dart';
-import 'home_page.dart';
-import 'login_page.dart';
-import 'productpage.dart';
 import 'pages/home.dart';
 import 'admin/admin_home_page.dart';
 import 'admin/adminlogin.dart';
+import 'pages/login_page.dart';
 // void main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
 
@@ -52,7 +49,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Home()
+      home: AdminLogin()
     );
   }
 }

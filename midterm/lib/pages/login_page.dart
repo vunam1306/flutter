@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:midterm/home_page.dart';
 import 'package:midterm/pages/home.dart';
 import 'package:midterm/widget/widget_support.dart';
-import 'pages/bottomnav.dart';
+import 'bottomnav.dart';
 import 'package:midterm/widget/widget_support.dart';
 import 'signup.dart';
 import 'forgotpass.dart';
@@ -22,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   String _errorMessage = '';
+  String userId = '';
 
   // Future<void> _signInWithEmailAndPassword() async {
   //   try {
@@ -48,30 +48,50 @@ class _LoginPageState extends State<LoginPage> {
   // }
 
   UserLogin() {
-    FirebaseFirestore.instance.collection("users").get().then((snapshot) {
-      snapshot.docs.forEach((result) {
-        if (result.data()['email'] != _emailController.text.trim()) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              backgroundColor: Colors.red[300],
-              content: Text(
-                "Your email is not correct",
-                style: TextStyle(fontSize: 18.0),
-              )));
-        } else if (result.data()['password'] !=
-            _passwordController.text.trim()) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              backgroundColor: Colors.red[300],
-              content: Text(
-                "Your password is not correct",
-                style: TextStyle(fontSize: 18.0),
-              )));
-        } else {
-          Route route = MaterialPageRoute(builder: (context) => Home());
-          Navigator.pushReplacement(context, route);
-        }
-      });
+  FirebaseFirestore.instance.collection("users").get().then((snapshot) {
+    snapshot.docs.forEach((result) {
+      if (result.data()['email'] != _emailController.text.trim()) {
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     backgroundColor: Colors.red[300],
+        //     content: Text(
+        //       "Your email is not correct",
+        //       style: TextStyle(fontSize: 18.0),
+        //     ),
+        //   ),
+        // );
+      } else if (result.data()['password'] !=
+          _passwordController.text.trim()) {
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     backgroundColor: Colors.red[300],
+        //     content: Text(
+        //       "Your password is not correct",
+        //       style: TextStyle(fontSize: 18.0),
+        //     ),
+        //   ),
+        // );
+      } else {
+        // Extract user_id from the current document
+        String userId = result.id;
+        String name = result.data()['name'];
+        String phone = result.data()['phone'];
+        // Navigate to the Home page, passing the email and userId
+        Route route = MaterialPageRoute(
+          builder: (context) => BottomNav(
+            name: name,
+            userId: userId, 
+            phone: phone, 
+            email: _emailController.text.trim(),
+            // Pass the userId
+          ),
+        );
+        Navigator.pushReplacement(context, route);
+      }
     });
-  }
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {

@@ -8,7 +8,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final String name;
+  final String userId;
+  final String phone;
+  Home({required this.name, required this.userId, required this.phone}); // Constructor updated
 
   @override
   State<Home> createState() => _HomeState();
@@ -16,7 +19,20 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  @override
+  void initState() {
+    super.initState();
+    // Initialize name and userId from the widget
+    name = widget.name;
+    userId = widget.userId;
+    phone = widget.phone;
+  }
+
   String selectedType = 'iPhone';
+  String name = '';
+  String userId = '';
+  String phone = '';
+  
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +48,7 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Hello vunam,",
+                  "Hello, $name",
                   style: AppWidget.boldTextFeildStyle(),
                 ),
                 Container(
@@ -84,10 +100,25 @@ class _HomeState extends State<Home> {
                       var imageUrl = product['Image'];
                       var productName = product['Name'];
                       var productPrice = product['Price'];
+                      var productDescription = product['Description'];
 
                       return GestureDetector(
                         onTap: () {
                           // Handle onTap event, e.g., navigate to details page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Details(
+                                imageUrl: imageUrl,
+                                productName: productName,
+                                productPrice: productPrice,
+                                productDescription: productDescription,
+                                userId: userId,
+                                name: name,
+                                phone: phone // Pass userId to details page
+                              ),
+                            ),
+                          );
                         },
                         child: Container(
                           margin: const EdgeInsets.all(5),
